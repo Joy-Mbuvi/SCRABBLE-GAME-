@@ -97,7 +97,7 @@ def turn(player, board, bag):
 def start_game():
     global round_number, players
     board = Board()
-    bag = TileBag(letter_points= LETTER_POINTS)
+    bag = TileBag(tile_points= LETTER_POINTS)
 
     num_of_players = 1
 
