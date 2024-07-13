@@ -11,32 +11,44 @@ class ComputerPlayer(Player):
         direction = ""
         valid_word = False
 
-        while not valid_word: 
-            # Step 1: Extract and shuffle the list of words
-            play_words = list(word_dictionary)
-            random.shuffle(play_words)
+        # hii inachukuwa words za dictionary inaassign to play words then inashuffle ndio a random word ichaguliwe
+        play_words = list(word_dictionary)
+        random.shuffle(play_words)
 
-            # Step 2: Iterate through the shuffled list to find a valid word
-            for word in play_words:
-                if word not in Word.played_words:
-                    word_to_play = word
-                    for row in range(15):
-                        for col in range(15):
-                            if board.board[row][col] != "":
-                                if self.can_place_word(board, word_to_play, row, col, "right"):
-                                    direction = "right"
-                                    valid_word = True
-                                    break
-                                if self.can_place_word(board, word_to_play, row, col, "down"):
-                                    direction = "down"
-                                    valid_word = True
-                                    break
-                        if valid_word:
+        # Filter words that can be formed from the rack
+        rack_letters = [tile.letter for tile in self.rack]
+        valid_words = [word for word in play_words if self.word_from_rack(word, rack_letters)]
+
+        # Iterate through the filtered list in the valid words and check if it can be placed on the board
+        for word in valid_words:
+            for row in range(15):
+                for col in range(15):
+                    if board.board[row][col] != "":
+                        if self.can_place_word(board, word, row, col, "right"):
+                            word_to_play = word
+                            direction = "right"
+                            valid_word = True
+                            break
+                        if self.can_place_word(board, word, row, col, "down"):
+                            word_to_play = word
+                            direction = "down"
+                            valid_word = True
                             break
                 if valid_word:
                     break
+            if valid_word:
+                break
 
         return word_to_play, [col, row], direction
+
+    def word_from_rack(self, word, rack): #will remove the letters(tiles) that have been chosen from the rack 
+        rack_copy = rack.copy()
+        for letter in word:
+            if letter in rack_copy:
+                rack_copy.remove(letter)
+            else:
+                return False
+        return True
 
     def can_place_word(self, board, word, row, col, direction):
         word_length = len(word)
