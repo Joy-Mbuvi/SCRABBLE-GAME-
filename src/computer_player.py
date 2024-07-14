@@ -1,5 +1,6 @@
-from src.player import Player
+from collections import Counter
 import random
+from src.player import Player
 from src.word import Word
 
 class ComputerPlayer(Player):
@@ -11,15 +12,13 @@ class ComputerPlayer(Player):
         direction = ""
         valid_word = False
 
-        # hii inachukuwa words za dictionary inaassign to play words then inashuffle ndio a random word ichaguliwe
+        # Read words from dictionary, shuffle and filter
         play_words = list(word_dictionary)
         random.shuffle(play_words)
-
-        # Filter words that can be formed from the rack
         rack_letters = [tile.letter for tile in self.rack]
-        valid_words = [word for word in play_words if self.word_from_rack(word, rack_letters)]
+        valid_words = [word for word in play_words if self.can_form_word(word, rack_letters)]
 
-        # Iterate through the filtered list in the valid words and check if it can be placed on the board
+        # Check if each valid word can be placed on the board
         for word in valid_words:
             for row in range(15):
                 for col in range(15):
@@ -41,12 +40,11 @@ class ComputerPlayer(Player):
 
         return word_to_play, [col, row], direction
 
-    def word_from_rack(self, word, rack): #will remove the letters(tiles) that have been chosen from the rack 
-        rack_copy = rack.copy()
-        for letter in word:
-            if letter in rack_copy:
-                rack_copy.remove(letter)
-            else:
+    def can_form_word(self, word, rack):
+        word_counter = Counter(word)
+        rack_counter = Counter(rack)
+        for letter in word_counter:
+            if word_counter[letter] > rack_counter[letter]:
                 return False
         return True
 
