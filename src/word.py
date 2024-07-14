@@ -1,15 +1,15 @@
 class Word:
     played_words = set()
 
-    def __init__(self, word, location, player, direction, board, word_dictionary, letter_points):
+    def __init__(self, word, location, player, direction, board, word_dictionary, tile_points):
         self.word = word
-        self.location = location
+        self.location = location #starting point
         self.player = player
         self.direction = direction
         self.board = board
         self.score = 0
         self.word_dictionary = word_dictionary
-        self.letter_points = letter_points
+        self.tile_points = tile_points
 
     def check_word(self):
         if self.word.upper() in self.word_dictionary and self.word.upper() not in Word.played_words:
@@ -18,7 +18,7 @@ class Word:
             return False
 
     def calculate_word_score(self):
-        self.score = sum(self.letter_points[letter] for letter in self.word)
+        self.score = sum(self.tile_points[letter] for letter in self.word)
         self.player.update_score(self.score)
         Word.played_words.add(self.word.upper())
 

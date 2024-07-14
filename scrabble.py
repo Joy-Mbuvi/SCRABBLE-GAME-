@@ -46,9 +46,7 @@ def turn(player, board, bag):
                 if len(Word.played_words) == 0:
                     row, col = 7, 7
                     direction = input("Direction of word (right or down): ").lower()
-                    valid_word = True
-
-                        
+                    valid_word = True     
                 else:
                     row = int(input("Row number: "))
                     col = int(input("Column number: "))
@@ -71,18 +69,14 @@ def turn(player, board, bag):
     if word_to_play == "":
         print("Turn skipped.")
     else:
-        if word.check_word():
-            if len(player.rack) == 0:
-                player.update_score(50)
-                print(f"\n{player.name} used all the tiles in the rack and was awarded a 50 point bonus.")
-            else:
-                word.calculate_word_score()
-                word.place_on_board()
-                player.remove_tiles(word_to_play)
-                player.refill_rack()
-                print(f"\n{player.name} played '{word.get_word()}' for {word.get_score()} points.")
-        else:
-            print("Invalid word placement.")
+        
+        word.calculate_word_score()
+        word.place_on_board()
+        player.remove_tiles(word_to_play)
+        player.refill_rack()
+        print(f"\n{player.name} played '{word.get_word()}' for {word.get_score()} points.")
+    
+    
 
     print(f"\n{player.name}'s score is: {player.get_score()}")
 
