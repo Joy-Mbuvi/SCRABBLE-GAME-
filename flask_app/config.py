@@ -2,20 +2,27 @@
 # ENVIRONMENT VARIABLES
 from datetime import timedelta
 from dotenv import load_dotenv
-
 import os
 
 load_dotenv()
 
-conf={
-    'dbname':os.getenv('db_name'),
-    'user':os.getenv('db_user'),
-    'password':os.getenv('db_password'),
-    'host':os.getenv('db_host'),
-    'port':'5432'
+conf = {
+    'dbname': os.getenv('db_name'),
+    'user': os.getenv('db_user'),
+    'password': os.getenv('db_password'),
+    'host': os.getenv('db_host'),
+    'port': '5432'
 }
 
 class Config:
-    SQLALCHEMY_DATABASE_URI=f"postgresql://{conf['user']}:{conf['password']}@{conf['host']}:5432/postgres"
-    JWT_SECRET_KEY=os.getenv('jwt_secret_key')
-    JWT_ACCESS_TOKEN_EXPIRES=timedelta(hours=20)
+    SQLALCHEMY_DATABASE_URI = f"postgresql://{conf['user']}:{conf['password']}@{conf['host']}:5432/postgres"
+    JWT_SECRET_KEY = os.getenv('jwt_secret_key')
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=20)
+    
+    # Session configuration
+    SESSION_TYPE = 'filesystem'  # You can change this to 'sqlalchemy', 'redis', etc. based on your needs
+    SESSION_PERMANENT = False
+    SESSION_USE_SIGNER = True
+    SESSION_KEY_PREFIX = 'scrabble_'
+    
+    

@@ -5,7 +5,7 @@ from .models import Game
 from .src.board_and_management import Board
 from .src.scrabble import WORD_DICTIONARY
 from .src.tile_and_bag import TileBag
-from .src.computer_player import generate_move
+from .src.computer_player import *
 import itertools
 import json
 from .util import to_int
@@ -106,7 +106,7 @@ def calculate_possible_moves(board, player_tiles):
 
     return possible_moves
 
-words=set([WORD_DICTIONARY])
+words=set(WORD_DICTIONARY)
 def generate_possible_words(player_tiles):
     possible_words = set()
     

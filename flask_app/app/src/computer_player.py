@@ -1,6 +1,6 @@
-from src.player import Player
+from .player import Player
 import random
-from src.word import Word
+from .word import Word
 
 class ComputerPlayer(Player):
 

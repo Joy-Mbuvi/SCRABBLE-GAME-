@@ -1,8 +1,10 @@
-from src.board_and_management import Board
-from src.computer_player import ComputerPlayer
-from src.player import Player
-from src.word import Word
-from src.tile_and_bag import TileBag
+from .board_and_management import Board
+from .computer_player import ComputerPlayer
+from .player import Player
+from .word import Word
+from .tile_and_bag import TileBag
+import os
+import sys
 
 # Define the letter points dictionary
 LETTER_POINTS = {
@@ -11,7 +13,13 @@ LETTER_POINTS = {
     'Y': 4, 'Z': 10, ' ': 0
 }
 
-with open('dict.txt', 'r') as file:
+# Get the directory containing this script
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Construct the path to dict.txt
+dict_path = os.path.join(current_dir, 'dict.txt')
+
+with open(dict_path, 'r') as file:
     words = [word.strip().upper() for word in file.readlines()]
 
 WORD_DICTIONARY = set(words)
