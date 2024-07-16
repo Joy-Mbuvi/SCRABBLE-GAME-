@@ -10,6 +10,7 @@ import itertools
 import json
 from .util import to_int
 
+
 game_blueprint=Blueprint('game',__name__) #created a blueprint instance
 
 @game_blueprint.route("/game/board",methods=["GET"])
