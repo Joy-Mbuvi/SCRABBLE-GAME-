@@ -139,7 +139,7 @@ def generate_possible_words(player_tiles):
 @jwt_required()
 def start_new_game():
     current_user=get_jwt_identity()
-    game=Game.query.filter_by(member_id=current_user['id']).first()
+    game=Game.query.filter_by(user_id=current_user['id']).first()
     if game:
         return jsonify({'message':'game exist'})
     else:
@@ -157,7 +157,7 @@ def start_new_game():
     tile_bag = TileBag(tile_points)
         
         
-    player_tiles = tile_bag.draw_tiles(7)  
+    player_tiles = tile_bag.draw_tiles(7)
         
         
     player_tiles_letters = [tile.letter for tile in player_tiles]
@@ -165,12 +165,16 @@ def start_new_game():
 
 
     db.session.commit()
-        
+
+    print(board)
+    print(player_tiles)
+
+    print(isinstance(player_tiles[0], TileBag))
     
     return jsonify({
         'message': "New game started",
-        'board': board,
-        'player_tiles': player_tiles
+        'board': str(board),
+        'player_tiles': str(player_tiles)
     })
 
 def create_board():
