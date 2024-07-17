@@ -75,6 +75,22 @@ def move():
     return jsonify({'message': f"Hi {current_user['username']} we present your board", 'board': board})
 
 @game_blueprint.route("/game/possible-move", methods=["GET"])
+
+
+@game_blueprint.route("/game/rack", methods=["GET"])
+@jwt_required()
+def get_rack():
+    current_user = get_jwt_identity()
+    game = Game.query.filter_by(user_id=current_user['id']).first()
+    if not game:
+        return jsonify({'message': "Oops, game not found"}), 400
+
+    player_tiles = session.get('player_tiles')
+    if not player_tiles:
+        return jsonify({'message': "Player tiles not found in session"}), 400
+
+    return jsonify({'player_tiles': player_tiles})
+
 @jwt_required()
 def possible_moves():
     current_user= get_jwt_identity() 
@@ -130,7 +146,7 @@ def start_new_game():
         game= Game(user_id=current_user['id'])
         db.session.add(game)
 
-    board=get_board()
+    board=create_board()
     game.board=json.dumps(board)
 
     tile_points = {

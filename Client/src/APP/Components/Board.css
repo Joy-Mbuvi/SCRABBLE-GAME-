@@ -1,17 +1,15 @@
 .board {
-    display: grid;
-    grid-template-columns: repeat(15, 40px);
-    grid-template-rows: repeat(15, 40px);
-    gap: 2px;
-  }
-  
-  .board-tile {
-    width: 40px;
-    height: 40px;
-    background-color: lightgrey;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid black;
-  }
-  
+  display: grid;
+  grid-template-columns: repeat(15, 1fr);
+  gap: 2px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.board-row {
+  display: contents;
+}
+
+.board-tile {
+  display: inline-block;
+}
