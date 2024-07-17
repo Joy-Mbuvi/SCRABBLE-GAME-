@@ -29,8 +29,6 @@ class Game(db.Model):  #one to one relationship,one member can have one game
 #we have serialized our board which is a 2d list which is alist that has lists and strings-which rep the cells in it. Posthress supports mostly object so in order to ensure compatibility,we create a column, db.Json is to tell postgress the type of data it is storing in our database, nullable part is that I value always has to be given, the default is that the when no value is provided this board will be used and the json.dumps serializes our 2d list into a json string
     start_position_row=db.Column(db.Integer,nullable =False,default=0)
     start_position_column=db.Column(db.Integer,nullable =False,default=0)
-
-
-
+    is_active = db.Column(db.Boolean, default=True)
 
 
