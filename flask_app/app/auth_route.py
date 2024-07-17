@@ -32,7 +32,7 @@ def signup():
     
     hashed_password = bcrypt.generate_password_hash(password).decode('utf8')
     
-    player = User(username=username, email=email, password=hashed_password)
+    player = User(username=username, email=email, hash_password=hashed_password)
     db.session.add(player)
     db.session.commit()
     
@@ -52,7 +52,7 @@ def login():
     if not player:
         return jsonify({'message': "Player not found"}), 404
     
-    pass_ok = bcrypt.check_password_hash(player.password.encode('utf-8'), password)
+    pass_ok = bcrypt.check_password_hash(player.hash_password.encode('utf-8'), password)
     if not pass_ok:
         return jsonify({"message": "Invalid password"}), 401
 
