@@ -11,23 +11,23 @@ import json
 from .util import to_int
 
 
-game_blueprint=Blueprint('game',__name__) #created a blueprint instance
+game_blueprint=Blueprint('game',__name__)
 
 @game_blueprint.route("/game/board",methods=["GET"])
-@jwt_required() #retrive game state and convert the board to JSON
+@jwt_required() 
 def get_board():
-    current_user= get_jwt_identity() #to get users info from jwt token
-    game= Game.query.filter_by(user_id=current_user['id']).first()#i query from the game model bu using the current user id to get their game state
+    current_user= get_jwt_identity() 
+    game= Game.query.filter_by(user_id=current_user['id']).first()
     if not game:
         return jsonify({'message': "oops Game not found"}),400
-    board=json.loads(game.board) #converts board to json
-    return jsonify ({'message':f"HI {current_user['username']} we present your board",'board':board})#return board state
+    board=json.loads(game.board) 
+    return jsonify ({'message':f"HI {current_user['username']} we present your board",'board':board})
 
 @game_blueprint.route("/game/make-move",methods=["PUT"])
 @jwt_required()
 def move():
     current_user= get_jwt_identity()
-    game= Game.query.filter_by(user_id=current_user['id']).first()#i query from the game model bu using the current user id to get their game state
+    game= Game.query.filter_by(user_id=current_user['id']).first()
     if not game:
         return jsonify({'message': "oops Game not found"}),400
 
@@ -59,7 +59,7 @@ def move():
     if not found_move:
         return jsonify({'message': "chose another move"})
     
-    #if move is valid,update the board
+    
     board_instance.update_board(board,word,x,y,direction_down,direction_right)
 
  # hapa ndio ensure kuturn switching uses the correct instances of Player and ComputerPlayer
@@ -77,8 +77,8 @@ def move():
 @game_blueprint.route("/game/possible-move", methods=["GET"])
 @jwt_required()
 def possible_moves():
-    current_user= get_jwt_identity() #to get users info from jwt token
-    game= Game.query.filter_by(user_id=current_user['id']).first()#i query from the game model bu using the current user id to get their game state
+    current_user= get_jwt_identity() 
+    game= Game.query.filter_by(user_id=current_user['id']).first()
     if not game:
         return jsonify({'message': "oops Game not found"}),400
     board=Board()
@@ -110,14 +110,14 @@ words=set(WORD_DICTIONARY)
 def generate_possible_words(player_tiles):
     possible_words = set()
     
-    # Generate all combinations of the tiles of all lengths
-    for length in range(1, len(player_tiles) + 1):  # Iterate through each possible length of words
-        for combination in itertools.combinations(player_tiles, length):  # Generate combinations of the current length
-            word = ''.join(combination)  # Join the combination into a string
-            if word in words:  # Check if the word is in the set of valid words
-                possible_words.add(word)  # Add to the set of possible words
+    
+    for length in range(1, len(player_tiles) + 1):  
+        for combination in itertools.combinations(player_tiles, length):  
+            word = ''.join(combination)  
+            if word in words:  
+                possible_words.add(word)  
 
-    return list(possible_words)  # Return as a list
+    return list(possible_words)  
 
 @game_blueprint.route("/game/new-game",methods=["GET"])
 @jwt_required()
@@ -140,17 +140,17 @@ def start_new_game():
         }
     tile_bag = TileBag(tile_points)
         
-        # Draw initial tiles for the player
-    player_tiles = tile_bag.draw_tiles(7)  # Assuming you want to draw 7 tiles
         
-        # Convert player tiles to a list of letters for storing in the session
+    player_tiles = tile_bag.draw_tiles(7)  
+        
+        
     player_tiles_letters = [tile.letter for tile in player_tiles]
     session['player_tiles']=player_tiles_letters
 
 
     db.session.commit()
         
-        # Return the new game state
+    
     return jsonify({
         'message': "New game started",
         'board': board,
