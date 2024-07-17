@@ -15,7 +15,7 @@ migrate = Migrate()
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'your-secret-key'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:tomandjerryare24@db.ekiqftvfqjfcfvfbdfkq.supabase.co:5432/postgres'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://scrabble_gdtz_user:d7bqDeB0ko2Ax3skfS75q9zGKemkmjfV@dpg-cqbqhpogph6c73c5b420-a.ohio-postgres.render.com/scrabble_gdtz'
     app.config['JWT_SECRET_KEY'] = 'your-jwt-secret-key'
 
     # Session configuration
