@@ -1,15 +1,33 @@
+/* Board.css */
 .board {
   display: grid;
   grid-template-columns: repeat(15, 1fr);
-  gap: 2px;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.board-row {
-  display: contents;
+  gap: 1px;
 }
 
 .board-tile {
-  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Tile.css */
+.tile {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: move;
+}
+
+/* Rack.css */
+.rack {
+  display: flex;
+  gap: 5px;
+  margin-top: 20px;
 }

@@ -1,16 +1,25 @@
-import React from 'react';
+// Board.js
+import React, { useState } from 'react';
+import BoardTile from './BoardTile';
 import './Board.css';
 
 const Board = () => {
   const boardSize = 15;
-  const tiles = Array.from({ length: boardSize * boardSize }, (_, index) => (
-    <div key={index} className="board-tile">
-      {/* Tile content can go here if needed */}
-    </div>
-  ));
+  const [boardTiles, setBoardTiles] = useState(Array(boardSize * boardSize).fill(null));
 
-  return <div className="board">{tiles}</div>;
+  const handleDropTile = (letter, index) => {
+    const newBoardTiles = [...boardTiles];
+    newBoardTiles[index] = letter;
+    setBoardTiles(newBoardTiles);
+  };
+
+  return (
+      <div className="board">
+        {boardTiles.map((tile, index) => (
+            <BoardTile key={index} index={index} onDropTile={handleDropTile} />
+        ))}
+      </div>
+  );
 };
 
 export default Board;
-
