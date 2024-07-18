@@ -13,8 +13,6 @@ function Game() {
 
   const [board, setBoard] = useState([]);
 
-  console.log(board);
-
   useEffect(() => {
     if (!user || !token) {
       navigate("/");

@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useContext, useState, useEffect } from "react";
 import APPCONTEXT from "../../context/APPCONTEXT";
-import Tile from '../../components/tile';
 import "./board.css";
 import "./rack.css";
 
@@ -14,7 +13,10 @@ function Board() {
   const [wordDirection, setWordDirection] = useState("right");
 
   const getBoard = () => {
-    axios({
+    if(token == null){
+      alert("Access token is null");
+    }
+    const request = axios({
       method: "GET",
       url: "http://127.0.0.1:5000/game/board",
       headers: {
@@ -30,6 +32,9 @@ function Board() {
   };
 
   const getRack = () => {
+    if(token == null){
+      alert("Access token is null");
+    }
     axios({
       method: "GET",
       url: "http://127.0.0.1:5000/game/rack",
@@ -51,6 +56,10 @@ function Board() {
   }, []);
 
   const makeMove = (x, y, word, direction) => {
+    if(token == null){
+      alert("Access token is null");
+    }
+
     axios({
       method: "PUT",
       url: "http://127.0.0.1:5000/game/make-move",
@@ -78,11 +87,18 @@ function Board() {
   };
 
   const handleDrop = (x, y, letter) => {
-    if (currentWord === "") {
+    if(currentWord === "") {
       setWordStart({ x, y });
     }
+
     setCurrentWord((prev) => prev + letter);
+
+    updateCell(x, y, letter);
   };
+
+  const updateCell = (x, y, letter) => {
+    board[y][x] = letter;
+  }
 
   const finalizeWord = () => {
     if (wordStart.x !== null && wordStart.y !== null && currentWord !== "") {
@@ -146,11 +162,30 @@ function Col(props) {
 
 function Rack(props) {
   const { tiles } = props;
+
   return (
     <div className="rack">
       {tiles.map((tile, index) => (
         <Tile key={index} letter={tile} />
       ))}
+    </div>
+  );
+}
+
+function Tile(props) {
+  const { letter } = props;
+
+  const handleDragStart = (e) => {
+    e.dataTransfer.setData('text/plain', letter);
+  };
+
+  return (
+    <div
+      className="tile"
+      draggable
+      onDragStart={handleDragStart}
+    >
+      {letter}
     </div>
   );
 }
