@@ -5,5 +5,5 @@
   }
 
   .w3-border[data-center="true"] {
-    background-color: lightblue; /* Different background for the center "X" cell */
+    background-color: lightpink; /* Different background for the center "X" cell */
   }

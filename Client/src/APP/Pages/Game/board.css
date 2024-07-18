@@ -1,0 +1,55 @@
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+  }
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* Board styles */
+  .board {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .row {
+    display: flex;
+  }
+  
+  .cell {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border: 1px solid black;
+  }
+  
+  .cell span {
+    font-size: 20px;
+  }
+  
+  /* Rack styles */
+  .rack {
+    display: flex;
+    margin-top: 20px;
+  }
+  
+  .tile {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    margin-right: 5px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+  }
+  

@@ -33,40 +33,38 @@ def get_board():
     return jsonify({'message': f"HI {current_user['username']} we present your board", 'board': board})
 
 
-@game_blueprint.route("/game/make-move",methods=["PUT"])
+@game_blueprint.route("/game/make-move", methods=["PUT"])
 @jwt_required()
 def move():
-    current_user= get_jwt_identity()
-    game= Game.query.filter_by(user_id=current_user['id']).first()
+    current_user = get_jwt_identity()
+    game = Game.query.filter_by(user_id=current_user['id']).first()
     if not game:
-        return jsonify({'message': "oops Game not found"}),400
+        return jsonify({'message': "Oops, game not found"}), 400
 
-    body=request.get_json()
-    direction=body.get('direction', 'right')  # Default to 'right' if not provided
-    x=to_int(body.get('x'))
-    y= to_int(body.get('y'))
-    word=body.get('word')
+    body = request.get_json()
+    direction = body.get('direction')
+    x = to_int(body.get('x'))
+    y = to_int(body.get('y'))
+    word = body.get('word')
 
-    if x is None or y is None or not word:
-        return jsonify({'message': "Invalid Input"}),400
-    
+    if x is None or y is None or not word or not direction:
+        return jsonify({'message': "Invalid input"}), 400
 
-    board=json.loads(game.board) 
+    board = json.loads(game.board)
     board_instance = Board()
     board_instance.board = board
 
-    if direction not in ["right", "down"]:
-        return jsonify({'message': "Invalid direction"}),400
     
-    if not board_instance.is_cell_available(word, direction, x, y) or not board_instance.check_intersection(word, direction, x, y):
-        return jsonify({'message': "NO! NO!"}), 400
-    
-    board_instance.update_board(word, direction, x, y)
-
-    game.board = json.dumps(board_instance.board)
-    db.session.commit()
-
-    return jsonify({'message': f"Hi {current_user['username']} we present your board", 'board': board_instance.board})
+    if board_instance.is_cell_available(word, direction, x, y) or board_instance.check_intersection(word, direction, x, y):
+            updated_board = board_instance.update_board(word, direction, x, y)
+            if updated_board:
+                game.board = json.dumps(updated_board)
+                db.session.commit()
+                return jsonify({'message': f"Hi {current_user['username']}, here is your updated board", 'board': updated_board})
+            else:
+                return jsonify({'message': "Failed to update the board"}), 400
+    else:
+            return jsonify({'message': "Invalid move: Cell not available or word does not intersect correctly"}), 400
 
 
 @game_blueprint.route("/game/rack", methods=["GET"])

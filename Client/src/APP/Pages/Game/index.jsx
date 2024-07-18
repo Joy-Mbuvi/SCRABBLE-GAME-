@@ -1,12 +1,17 @@
 import axios from "axios";
 import { useContext, useState, useEffect } from "react";
 import APPCONTEXT from "../../context/APPCONTEXT";
-import Tile from '../../components/tile'; 
+import Tile from '../../components/tile';
+import "./board.css";
+import "./rack.css";
 
 function Board() {
   const { token } = useContext(APPCONTEXT);
   const [board, setBoard] = useState([]);
   const [rack, setRack] = useState([]);
+  const [currentWord, setCurrentWord] = useState("");
+  const [wordStart, setWordStart] = useState({ x: null, y: null });
+  const [wordDirection, setWordDirection] = useState("right");
 
   const getBoard = () => {
     axios({
@@ -54,10 +59,10 @@ function Board() {
         "Content-Type": "application/json",
       },
       data: {
-        x,
-        y,
-        word,
         direction,
+        x: parseInt(x, 10),
+        y: parseInt(y, 10),
+        word,
       },
     })
       .then((res) => {
@@ -67,45 +72,59 @@ function Board() {
         alert(res.data.message);
       })
       .catch((e) => {
-        console.error("Error making move:", e);
-        alert("Error making move. Please check the console for more details.");
+        console.error("Error making move:", e.response ? e.response.data : e.message);
+        alert(`Error making move: ${e.response ? e.response.data.message : e.message}`);
       });
   };
 
+  const handleDrop = (x, y, letter) => {
+    if (currentWord === "") {
+      setWordStart({ x, y });
+    }
+    setCurrentWord((prev) => prev + letter);
+  };
+
+  const finalizeWord = () => {
+    if (wordStart.x !== null && wordStart.y !== null && currentWord !== "") {
+      makeMove(wordStart.x, wordStart.y, currentWord, wordDirection);
+      setCurrentWord("");
+      setWordStart({ x: null, y: null });
+    } else {
+      alert("Word is not valid");
+    }
+  };
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div className="container">
       <div className="board">
         {board.map((row, i) => (
-          <Row key={i} r={i} row={row} setBoard={setBoard} makeMove={makeMove} />
+          <Row key={i} r={i} row={row} handleDrop={handleDrop} />
         ))}
       </div>
       <Rack tiles={rack} />
+      {currentWord && (
+        <div style={{ marginTop: "20px" }}>
+          <p>Current Word: {currentWord}</p>
+          <button onClick={finalizeWord}>Place Word</button>
+        </div>
+      )}
     </div>
   );
 }
 
 function Row(props) {
-  const { row = [], r = 0, setBoard = () => {}, makeMove = () => {} } = props;
+  const { row = [], r = 0, handleDrop = () => {} } = props;
 
   return (
     <div style={{ display: "flex" }}>
       {row.map((col, i) => (
         <div
-          className="w3-border"
+          className="cell"
           key={i}
-          style={{
-            width: "40px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "40px",
-            backgroundColor: "white",
-            border: "1px solid black",
-          }}
           onDragOver={(e) => e.preventDefault()}
           onDrop={(e) => {
             const letter = e.dataTransfer.getData('text/plain');
-            makeMove(i, r, letter, 'right'); // or 'down', depending on your use case
+            handleDrop(i, r, letter);
           }}
         >
           <Col value={col} />
@@ -118,21 +137,17 @@ function Row(props) {
 function Col(props) {
   const { value } = props;
 
-  if (value) {
-    return (
-      <span style={{ fontSize: "20px" }}>
-        {value}
-      </span>
-    );
-  }
-
-  return null;
+  return (
+    <span style={{ fontSize: "20px" }}>
+      {value}
+    </span>
+  );
 }
 
 function Rack(props) {
   const { tiles } = props;
   return (
-    <div className="rack" style={{ display: 'flex', marginTop: '20px' }}>
+    <div className="rack">
       {tiles.map((tile, index) => (
         <Tile key={index} letter={tile} />
       ))}
