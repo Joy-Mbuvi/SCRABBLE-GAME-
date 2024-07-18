@@ -1,8 +1,9 @@
 import { useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import APPCONTEXT from "../../Context/APPCONTEXT";
-import ErrorPanel from "../../Components/ErrorPanel";
+import ErrorPanel from "../../components/ErrorPanel";
+import APPCONTEXT from "../../context/APPCONTEXT";
+
 
 
 

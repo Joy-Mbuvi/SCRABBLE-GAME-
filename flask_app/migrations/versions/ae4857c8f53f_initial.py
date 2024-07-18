@@ -1,8 +1,8 @@
-"""created_user_game_models
+"""initial
 
-Revision ID: ccb14a5c4406
+Revision ID: ae4857c8f53f
 Revises: 
-Create Date: 2024-07-15 02:55:41.817811
+Create Date: 2024-07-17 20:34:14.440363
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ccb14a5c4406'
+revision = 'ae4857c8f53f'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -22,10 +22,10 @@ def upgrade():
     sa.Column('id', sa.BigInteger(), nullable=False),
     sa.Column('username', sa.String(length=80), nullable=False),
     sa.Column('email', sa.String(length=120), nullable=False),
-    sa.Column('password', sa.String(length=8), nullable=False),
+    sa.Column('hash_password', sa.String(length=140), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
-    sa.UniqueConstraint('password'),
+    sa.UniqueConstraint('hash_password'),
     sa.UniqueConstraint('username')
     )
     op.create_table('game',
@@ -34,6 +34,7 @@ def upgrade():
     sa.Column('board', sa.JSON(), nullable=False),
     sa.Column('start_position_row', sa.Integer(), nullable=False),
     sa.Column('start_position_column', sa.Integer(), nullable=False),
+    sa.Column('is_active', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('user_id')

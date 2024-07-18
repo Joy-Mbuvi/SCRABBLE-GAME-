@@ -1,0 +1,9 @@
+.c_screen {
+    height: 100vh;
+    width: 100vw;
+    
+  }
+
+  .w3-border[data-center="true"] {
+    background-color: lightblue; /* Different background for the center "X" cell */
+  }

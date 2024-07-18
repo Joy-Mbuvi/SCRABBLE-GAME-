@@ -1,6 +1,5 @@
-// Tile.js
 import React from 'react';
-import './Tile.css';
+import './tile.css';
 
 const Tile = ({ letter }) => {
   const handleDragStart = (e) => {
@@ -12,6 +11,16 @@ const Tile = ({ letter }) => {
           className="tile"
           draggable
           onDragStart={handleDragStart}
+          style={{
+            width: "40px",
+            height: "40px",
+            margin: "5px",
+            border: "1px solid blue",
+            display: "inline-block",
+            textAlign: "center",
+            lineHeight: "40px",
+            fontSize: "20px",
+          }}
       >
         {letter}
       </div>
